@@ -1,0 +1,41 @@
+# Node.js
+node_modules/
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+package-lock.json
+
+# dotenv local (si lo usas)
+.env
+.env.*.local
+
+# Logs
+logs/
+*.log
+
+# Directorios temporales
+tmp/
+temp/
+
+# Editor configs
+.vscode/
+.idea/
+*.sw?
+
+# Sistema operativo
+.DS_Store
+Thumbs.db
+
+# Docker
+*.local
+docker-compose.override.yml
+
+# Terraform (si estás mezclando infraestructura)
+*.tfstate
+*.tfstate.backup
+.terraform/
+crash.log
+terraform.tfvars
+
+# GitHub Actions runtime
+.github/workflows/*-temp.yml
