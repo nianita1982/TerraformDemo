@@ -42,3 +42,7 @@ jobs:
       run: |
         sed "s|REPLACE_ME|${{ secrets.ACR_LOGIN_SERVER }}/${{ env.IMAGE_NAME }}:${{ github.sha }}|" app.yaml > app.generated.yaml
         kubectl apply -f app.generated.yaml
+
+    - name: Provide Permission to AKS to pull from ACR
+      run: |
+        az aks update --name aks-demo-cluster --resource-group RG-Terraform-Demo --attach-acr myacrterraformdemo
