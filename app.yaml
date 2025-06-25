@@ -1,0 +1,41 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: node-app
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: node
+  template:
+    metadata:
+      labels:
+        app: node
+    spec:
+      containers:
+      - name: node-container
+        image: REPLACE_ME
+        ports:
+        - containerPort: 3000
+        env:
+        - name: DB_USER
+          value: "placeholder" # será reemplazado con Key Vault en la siguiente iteración
+        - name: DB_PASSWORD
+          value: "placeholder"
+        - name: DB_HOST
+          value: "placeholder"
+        - name: DB_NAME
+          value: "placeholder"
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: node-service
+spec:
+  type: LoadBalancer
+  selector:
+    app: node
+  ports:
+    - protocol: TCP
+      port: 80
+      targetPort: 3000
