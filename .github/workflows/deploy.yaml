@@ -49,6 +49,7 @@ jobs:
 
     - name: Install CSI secrets-store-csi-driver
       run: |
+        helm uninstall csi-secrets-store-provider-azure -n kube-system
         helm repo add secrets-store-csi-driver https://kubernetes-sigs.github.io/secrets-store-csi-driver/charts
         helm repo update
         helm install csi-secrets-store secrets-store-csi-driver/secrets-store-csi-driver --namespace kube-system
