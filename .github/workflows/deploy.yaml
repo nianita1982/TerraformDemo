@@ -54,9 +54,9 @@ jobs:
         helm repo update
         helm install csi-secrets-store secrets-store-csi-driver/secrets-store-csi-driver --namespace kube-system
 
-    - name: Install Azure Key Vault Provider
-      run: |
-        kubectl apply -f https://raw.githubusercontent.com/Azure/secrets-store-csi-driver-provider-azure/master/deployment/azure-provider.yaml
+- name: Install Azure Key Vault Provider
+  run: |
+    kubectl apply -f https://raw.githubusercontent.com/Azure/secrets-store-csi-driver-provider-azure/main/deployment/azureprovider.yaml
 
     - name: Apply SecretProviderClass
       run: kubectl apply -f secret-provider.yaml
