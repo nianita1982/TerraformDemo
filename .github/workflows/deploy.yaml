@@ -55,15 +55,12 @@ jobs:
           echo "No previous release found, continuing..."
         fi
 
-    - name: Install CSI secrets-store-csi-driver
+    - name: Install CSI driver + Azure Provider
       run: |
-        helm repo add secrets-store-csi-driver https://kubernetes-sigs.github.io/secrets-store-csi-driver/charts
+        helm repo add csi-azure https://azure.github.io/secrets-store-csi-driver-provider-azure/charts
         helm repo update
-        helm upgrade --install csi-secrets-store secrets-store-csi-driver/secrets-store-csi-driver --namespace kube-system
-
-    - name: Install Azure Key Vault Provider
-      run: |
-        kubectl apply -f https://raw.githubusercontent.com/Azure/secrets-store-csi-driver-provider-azure/main/deployment/provider-azure-installer.yaml
+        helm upgrade --install csi-azure-provider csi-azure/csi-secrets-store-provider-azure \
+          --namespace kube-system
 
     - name: Apply SecretProviderClass
       run: kubectl apply -f secret-provider.yaml
