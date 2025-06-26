@@ -46,3 +46,17 @@ jobs:
     - name: Provide Permission to AKS to pull from ACR
       run: |
         az aks update --name aks-demo-cluster --resource-group RG-Terraform-Demo --attach-acr myacrterraformdemo
+
+    - name: Install Azure Key Vault Provider
+      run: |
+        helm repo add azure-keyvault-provider https://azure.github.io/secrets-store-csi-driver-provider-azure/charts
+        helm repo update
+        helm install azure-keyvault-provider azure-keyvault-provider/azure-keyvault-provider --namespace kube-system
+
+    - name: Install CSI secrets-store-csi-driver
+      run: |
+        helm repo add secrets-store-csi-driver https://kubernetes-sigs.github.io/secrets-store-csi-driver/charts
+        helm repo update
+        helm install csi-secrets-store secrets-store-csi-driver/secrets-store-csi-driver --namespace kube-system
+        kubectl apply -f https://raw.githubusercontent.com/Azure/secrets-store-csi-driver-provider-azure/master/deployment/azure-provider.yaml
+        kubectl apply -f secret-provider.yaml
