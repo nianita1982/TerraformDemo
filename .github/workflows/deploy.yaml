@@ -59,7 +59,7 @@ jobs:
       run: |
         helm repo add secrets-store-csi-driver https://kubernetes-sigs.github.io/secrets-store-csi-driver/charts
         helm repo update
-        helm install csi-secrets-store secrets-store-csi-driver/secrets-store-csi-driver --namespace kube-system
+        helm upgrade --install csi-secrets-store secrets-store-csi-driver/secrets-store-csi-driver --namespace kube-system
 
     - name: Install Azure Key Vault Provider
       run: |
