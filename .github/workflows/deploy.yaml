@@ -51,7 +51,7 @@ jobs:
       run: |
         helm repo add azure-keyvault-provider https://azure.github.io/secrets-store-csi-driver-provider-azure/charts
         helm repo update
-        helm install azure-keyvault-provider azure-keyvault-provider/azure-keyvault-provider --namespace kube-system
+        helm install csi-secrets-store-provider-azure azure-keyvault-provider/csi-secrets-store-provider-azure --namespace kube-system
 
     - name: Install CSI secrets-store-csi-driver
       run: |
