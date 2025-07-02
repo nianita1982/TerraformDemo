@@ -49,7 +49,9 @@ jobs:
 
     - name: Uninstall old provider (optional)
       run: |
+        set +e
         if helm list -n kube-system | grep -q csi-secrets-store-provider-azure; then
+          echo "Previous release found. Uninstalling..."
           helm uninstall csi-secrets-store-provider-azure -n kube-system
         else
           echo "No previous release found, continuing..."
