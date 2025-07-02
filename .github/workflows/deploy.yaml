@@ -49,14 +49,26 @@ jobs:
 
     - name: Uninstall old provider (optional)
       run: |
-        set +e
-        if helm list -n kube-system | grep -q csi-secrets-store-provider-azure; then
+        set +e  # desactiva la detención automática por errores
+
+        # Verifica si el release existe y está en estado válido
+        helm status csi-secrets-store-provider-azure -n kube-system > /dev/null 2>&1
+        STATUS_RESULT=$?
+
+        if [ $STATUS_RESULT -eq 0 ]; then
           echo "Previous release found. Uninstalling..."
           helm uninstall csi-secrets-store-provider-azure -n kube-system
+          UNINSTALL_RESULT=$?
+          if [ $UNINSTALL_RESULT -ne 0 ]; then
+            echo "⚠️ Warning: Uninstall command failed, but continuing anyway..."
+          fi
         else
-          echo "No previous release found, continuing..."
+          echo "No previous release found or already deleted."
         fi
-        
+
+        set -e  # reactiva el fallo automático
+
+
 
     - name: Install or upgrade CSI driver + Azure Key Vault Provider
       run: |
