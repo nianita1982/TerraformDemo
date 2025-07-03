@@ -78,9 +78,13 @@ jobs:
         helm upgrade --install csi-secrets-store csi-azure/csi-secrets-store-provider-azure \
           --namespace kube-system
 
-    - name: Install Azure Key Vault CSI Provider (secrets integration layer)
+    - name: AKS enable Key Vault Secrets CSI provider
       run: |
-        kubectl apply -f https://raw.githubusercontent.com/Azure/secrets-store-csi-driver-provider-azure/main/deploy/install-provider-azure.yaml
+        az aks enable-addons \
+          --resource-group ${{ secrets.AKS_RG }} \
+          --name ${{ secrets.AKS_NAME }} \
+          --addons azure-keyvault-secrets-provider \
+          --enable-secret-rotation
 
     - name: Apply SecretProviderClass
       run: kubectl apply -f secret-provider.yaml
