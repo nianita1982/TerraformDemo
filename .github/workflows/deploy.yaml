@@ -96,7 +96,44 @@ jobs:
           echo "✅ Addon already enabled. Skipping..."
         fi
 
-    - name: Apply SecretProviderClass
+    - name: Apply SecretProviderClass inline (string-safe)
       run: |
         kubectl delete secretproviderclass azure-kv-secrets --ignore-not-found
-        kubectl apply -f secret-provider.yaml
+
+        echo '
+        apiVersion: secrets-store.csi.x-k8s.io/v1
+        kind: SecretProviderClass
+        metadata:
+          name: azure-kv-secrets
+          namespace: default
+        spec:
+          provider: azure
+          secretObjects:
+            - secretName: kv-secrets
+              type: Opaque
+              data:
+                - objectName: DB-USER
+                  key: DB-USER
+                - objectName: DB-PASSWORD
+                  key: DB-PASSWORD
+                - objectName: DB-HOST
+                  key: DB-HOST
+                - objectName: DB-NAME
+                  key: DB-NAME
+          parameters:
+            usePodIdentity: "false"
+            useVMManagedIdentity: "true"
+            userAssignedIdentityID: ""
+            keyvaultName: kv-terra-demo
+            tenantId: fb43d70d-43c8-44cc-a870-6592e9748e0b
+            objects: |
+              - objectName: DB-USER
+                objectType: secret
+              - objectName: DB-PASSWORD
+                objectType: secret
+              - objectName: DB-HOST
+                objectType: secret
+              - objectName: DB-NAME
+                objectType: secret
+        ' | kubectl apply -f -
+
