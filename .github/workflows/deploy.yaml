@@ -105,7 +105,6 @@ jobs:
         kind: SecretProviderClass
         metadata:
           name: azure-kv-secrets
-          namespace: default
         spec:
           provider: azure
           secretObjects:
