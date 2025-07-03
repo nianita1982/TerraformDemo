@@ -97,4 +97,6 @@ jobs:
         fi
 
     - name: Apply SecretProviderClass
-      run: kubectl apply -f secret-provider.yaml
+      run: |
+        kubectl delete secretproviderclass azure-kv-secrets --ignore-not-found
+        kubectl apply -f secret-provider.yaml
