@@ -80,7 +80,7 @@ jobs:
 
     - name: Install Azure Key Vault CSI Provider (secrets integration layer)
       run: |
-        kubectl apply -f https://raw.githubusercontent.com/Azure/secrets-store-csi-driver-provider-azure/main/deploy/provider-azure-installer.yaml
+        kubectl apply -f https://raw.githubusercontent.com/Azure/secrets-store-csi-driver-provider-azure/main/deploy/install-provider-azure.yaml
 
     - name: Apply SecretProviderClass
       run: kubectl apply -f secret-provider.yaml
