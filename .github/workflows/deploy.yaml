@@ -78,13 +78,23 @@ jobs:
         helm upgrade --install csi-secrets-store csi-azure/csi-secrets-store-provider-azure \
           --namespace kube-system
 
-    - name: AKS enable Key Vault Secrets CSI provider
+    - name: Ensure CSI Key Vault Secrets Provider addon is enabled
       run: |
-        az aks enable-addons \
-          --resource-group ${{ secrets.AKS_RG }} \
-          --name ${{ secrets.AKS_NAME }} \
-          --addons azure-keyvault-secrets-provider \
-          --enable-secret-rotation
+        if ! az aks show \
+            --resource-group ${{ secrets.AKS_RG }} \
+            --name ${{ secrets.AKS_NAME }} \
+            --query "addonProfiles.azureKeyvaultSecretsProvider.enabled" \
+            --output tsv | grep -q true; then
+
+          echo "🔧 Enabling azure-keyvault-secrets-provider addon..."
+          az aks enable-addons \
+            --resource-group ${{ secrets.AKS_RG }} \
+            --name ${{ secrets.AKS_NAME }} \
+            --addons azure-keyvault-secrets-provider \
+            --enable-secret-rotation
+        else
+          echo "✅ Addon already enabled. Skipping..."
+        fi
 
     - name: Apply SecretProviderClass
       run: kubectl apply -f secret-provider.yaml
