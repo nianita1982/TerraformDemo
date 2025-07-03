@@ -137,3 +137,6 @@ jobs:
                 objectType: secret
         ' | kubectl apply -f -
 
+    - name: Restart deployment to re-trigger secret mount
+      run: |
+        kubectl rollout restart deployment node-app
