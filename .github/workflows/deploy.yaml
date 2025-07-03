@@ -68,13 +68,19 @@ jobs:
 
         set -e  # reactiva el fallo automático
 
-
-
-    - name: Install or upgrade CSI driver + Azure Key Vault Provider
+    - name: Add CSI driver Helm repo
       run: |
         helm repo add csi-azure https://azure.github.io/secrets-store-csi-driver-provider-azure/charts
         helm repo update
-        helm upgrade --install csi-secrets-store csi-azure/csi-secrets-store-provider-azure --namespace kube-system
+
+    - name: Install/Upgrade CSI Secrets Store Driver (Kubernetes CSI layer)
+      run: |
+        helm upgrade --install csi-secrets-store csi-azure/csi-secrets-store-provider-azure \
+          --namespace kube-system
+
+    - name: Install Azure Key Vault CSI Provider (secrets integration layer)
+      run: |
+        kubectl apply -f https://raw.githubusercontent.com/Azure/secrets-store-csi-driver-provider-azure/master/deployment/azure-provider.yaml
 
     - name: Apply SecretProviderClass
       run: kubectl apply -f secret-provider.yaml
