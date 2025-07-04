@@ -38,6 +38,18 @@ jobs:
         resource-group: ${{ secrets.AKS_RG }}
         cluster-name: ${{ secrets.AKS_NAME }}
 
+    - name: Add CSI DRIVER Helm repo (base layer)
+      run: |
+        helm repo add secrets-store-csi-driver https://kubernetes-sigs.github.io/secrets-store-csi-driver/charts
+        helm repo update
+
+    - name: Install CSI DRIVER (core)
+      run: |
+        helm upgrade --install secrets-store-csi-driver secrets-store-csi-driver/secrets-store-csi-driver \
+          --namespace kube-system \
+          --set syncSecret.enabled=true
+
+
     - name: Deploy to AKS
       run: |
         sed "s|REPLACE_ME|${{ secrets.ACR_LOGIN_SERVER }}/${{ env.IMAGE_NAME }}:${{ github.sha }}|" app.yaml > app.generated.yaml
@@ -88,7 +100,7 @@ jobs:
       run: |
         if ! az aks show \
             --resource-group ${{ secrets.AKS_RG }} \
-            --name ${{ secrets.AKS_NAME }} \
+            --name ${{ secrets.AKS_NAME }} \a
             --query "addonProfiles.azureKeyvaultSecretsProvider.enabled" \
             --output tsv | grep -q true; then
 
