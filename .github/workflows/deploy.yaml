@@ -70,7 +70,7 @@ jobs:
 
     - name: Force delete CSIDriver if it exists (avoid Helm conflict)
       run: |
-      kubectl delete csidriver secrets-store.csi.k8s.io --ignore-not-found
+        kubectl delete csidriver secrets-store.csi.k8s.io --ignore-not-found
 
 
     - name: Add CSI driver Helm repo
