@@ -45,7 +45,7 @@ jobs:
 
     - name: Install CSI DRIVER (core)
       run: |
-        helm upgrade --install secrets-store-csi-driver secrets-store-csi-driver/secrets-store-csi-driver \
+        helm upgrade --install csi-secrets-store secrets-store-csi-driver/secrets-store-csi-driver \
           --namespace kube-system \
           --set syncSecret.enabled=true
 
