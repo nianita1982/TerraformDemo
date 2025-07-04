@@ -68,6 +68,11 @@ jobs:
 
         set -e  # reactiva el fallo automático
 
+    - name: Force delete CSIDriver if it exists (avoid Helm conflict)
+    run: |
+      kubectl delete csidriver secrets-store.csi.k8s.io --ignore-not-found
+
+
     - name: Add CSI driver Helm repo
       run: |
         helm repo add csi-azure https://azure.github.io/secrets-store-csi-driver-provider-azure/charts
