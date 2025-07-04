@@ -69,7 +69,7 @@ jobs:
         set -e  # reactiva el fallo automático
 
     - name: Force delete CSIDriver if it exists (avoid Helm conflict)
-    run: |
+      run: |
       kubectl delete csidriver secrets-store.csi.k8s.io --ignore-not-found
 
 
