@@ -76,7 +76,8 @@ jobs:
     - name: Install/Upgrade CSI Secrets Store Driver (Kubernetes CSI layer)
       run: |
         helm upgrade --install csi-secrets-store csi-azure/csi-secrets-store-provider-azure \
-          --namespace kube-system
+          --namespace kube-system \
+          --set secrets-store.csi.k8s.io.syncSecret.enabled=true
 
     - name: Ensure CSI Key Vault Secrets Provider addon is enabled
       run: |
